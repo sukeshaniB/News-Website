@@ -1,23 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useState,useEffect} from 'react'
+import Menu from './components/Menu'
+import NewsGrid from './components/NewsGrid'
+import Footer from './components/Footer'
 
 function App() {
+  const[items,setItems0]=useState([])
+  const[active,setActive]=useState(1)
+  const[category,setCategory]=useState("general")
+  useEffect(()=>{
+    fetch(`https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=2b996eb580f448fcb467d52517f9845c`)
+    .then(res=>res.json())
+    .then(data=>setItems0(data.articles))
+  },[category])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      
+    <Menu active={active} setActive={setActive} setCategory={setCategory}/>
+    <h3 className='title'>Top News Headline</h3>
+    <NewsGrid items={items}/>
+    <Footer/>
     </div>
   );
 }
